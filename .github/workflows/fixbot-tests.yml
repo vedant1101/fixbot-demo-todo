@@ -1,0 +1,33 @@
+name: fixbot-tests
+run-name: fixbot-${{ inputs.run_token || github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_token:
+        description: "ID FixBot uses to find this run"
+        required: false
+        type: string
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fixbot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: Run tests
+        run: python -m pytest -q --tb=short -rf

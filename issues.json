@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Pagination drops the last item of every page",
+    "body": "Calling `TaskStore.paginate(page=1, per_page=2)` with 5 tasks returns only 1 task instead of 2. Every page seems to be one item short.\n\n**Expected:** each page returns up to `per_page` tasks.\n**Test:** `tests/test_store.py::test_paginate_returns_full_page`"
+  },
+  {
+    "title": "Deleting a completed task raises TaskNotFound",
+    "body": "If I complete a task and then try to delete it, `TaskStore.delete()` raises `TaskNotFound` even though the task exists.\n\n**Steps:**\n1. `t = store.add('x')`\n2. `store.complete(t.id)`\n3. `store.delete(t.id)` → raises\n\n**Expected:** completed tasks can be deleted too.\n**Test:** `tests/test_store.py::test_delete_completed_task`"
+  },
+  {
+    "title": "Search should be case-insensitive",
+    "body": "`store.search('milk')` doesn't find a task titled \"Buy Milk\".\n\n**Expected:** search matches regardless of letter case.\n**Test:** `tests/test_store.py::test_search_is_case_insensitive`"
+  }
+]
